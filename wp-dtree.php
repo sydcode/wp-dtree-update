@@ -1,8 +1,8 @@
 <?php
 	/*
-	Plugin Name: WP-dTree
+	Plugin Name: WP-dTree (updated)
 	Plugin URI: http://wordpress.org/extend/plugins/wp-dtree-30/
-	Description: <a href="http://www.destroydrop.com/javascripts/tree/">Dynamic tree</a> widgets to replace the standard archives-, categories-, pages- and link lists.
+	Description: <a href="http://www.destroydrop.com/javascripts/tree/">Dynamic tree</a> widgets to replace the standard archives-, categories-, pages- and link lists. Updated by <a href="http://www.freelancer.com.au/u/sydcode.html" title="Click to visit Freelancer profile">sydcode</a>.
 	Version: 4.3.1
 	Author: Ulf Benjaminsson
 	Author URI: http://www.ulfben.com
@@ -17,6 +17,14 @@
 	This is a plugin created for Wordpress in order to generate JS navigation trees	for your archives. 
 	It uses the (much modified) JS engine dTree that was created by Geir Landrö (http://www.destroydrop.com/javascripts/tree/).
 	Christopher Hwang wrapped the wordpress APIs around it so that we can use it as a plugin. He handled all development of WP-dTree up to version 2.2 (~2007).	
+	
+	This plugin was updated by sydcode in August 2013.
+	email: sydcode@gmail.com | profile: http://www.freelancer.com.au/u/sydcode.html
+	- fixed sorting in archives widget (wp-dtree-arc.php)
+	- added items to "Sort posts by" dropdown in categories widget (wp-dtree-cat-widget.php)
+	- added items to "Sort posts by" dropdown in taxonomy widget (wp-dtree-tax-widget.php)
+	- added support for "Advanced Post Types Order" plugin (wp-dtree-cat.php)
+	- added hooks for clearing cache when order updated (wp-dtree.php)
 	*/		
 	add_action('plugins_loaded', 'wpdt_init');
 	register_activation_hook(__FILE__, 'wpdt_activate');	
@@ -48,6 +56,12 @@
 		add_action('wp_print_styles', 	'wpdt_css');	
 		add_action('wp_print_scripts', 	'wpdt_js');	
 		add_action('widgets_init', 		'wpdt_load_widgets');	
+		
+		// Support for "Advanced Post Types Order" plugin
+		// Added by sydcode (August 2013)
+		add_action('apto_order_update', 'wpdt_update_cache');	
+		add_action('apto_order_update_hierarchical', 'wpdt_update_cache');			
+		
 		wpdt_print_errors();		
 	}			
 	function wpdt_print_errors(){	

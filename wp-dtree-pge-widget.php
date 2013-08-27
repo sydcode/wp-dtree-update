@@ -13,15 +13,15 @@ class WPDT_Pages_Widget extends WPDT_Widget{
 	function update($new_settings, $old_settings) {// Update the widget settings.					
 		$old_settings = parent::update($new_settings, $old_settings);
 		$settings = $old_settings;				
-		$settings['hierarchical'] 	= $new_settings['hierarchical'];		
-		$settings['meta_key'] 		= $new_settings['meta_key'];
-		$settings['meta_value'] 	= $new_settings['meta_value'];
+		$settings['hierarchical'] 	= isset($new_settings['hierarchical']) ? $new_settings['hierarchical'] : '';		
+		$settings['meta_key'] 		= isset($new_settings['meta_key']) ? $new_settings['meta_key'] : '';
+		$settings['meta_value'] 	= isset($new_settings['meta_value']) ? $new_settings['meta_value'] : '';
 		$settings['authors'] 		= wpdt_clean_exclusion_list($new_settings['authors']);
-		$settings['exclude_tree'] 	= $new_settings['exclude_tree'];
-		$settings['number'] 		= $new_settings['number'];
-		$settings['offset'] 		= intval($new_settings['offset']);
-		$settings['child_of'] 		= intval($new_settings['child_of']); 
-		$settings['parent'] 		= intval($new_settings['parent']);
+		$settings['exclude_tree'] 	= isset($new_settings['exclude_tree']) ? $new_settings['exclude_tree'] : '';
+		$settings['number'] 		= isset($new_settings['number']) ? $new_settings['number'] : '';
+		$settings['offset'] 		= isset($new_settings['offset']) ? intval($new_settings['offset']) : '';
+		$settings['child_of'] 		= isset($new_settings['child_of']) ? intval($new_settings['child_of']) : ''; 
+		$settings['parent'] 		= isset($new_settings['parent']) ? intval($new_settings['parent']) : '';
 		$settings['treetype'] 		= 'pge';
 		$settings['title_li']		= '';//the widget already prints a title. (this is only for the the noscript output, which is from wp_list_pages()
 		if($settings['parent'] != -1){$settings['child_of'] = 0;}		
@@ -57,7 +57,7 @@ class WPDT_Pages_Widget extends WPDT_Widget{
 				<option value="0" <?php selected(0, $settings['child_of']); ?>><?php echo esc_attr('(allow all)'); ?></option> 
 			<?php 				
 				foreach (get_pages() as $page) {					
-					echo "<option value='{$page->ID}'{$sel}"; selected($page->ID, $settings['child_of']); echo ">{$page->post_title} (ID: {$page->ID})</option>\n";								
+					echo "<option value='{$page->ID}' "; selected($page->ID, $settings['child_of']); echo ">{$page->post_title} (ID: {$page->ID})</option>\n";								
 				}
 			 ?>
 			</select>		
@@ -67,7 +67,7 @@ class WPDT_Pages_Widget extends WPDT_Widget{
 				<option value="-1" <?php selected(-1,$settings['parent']);?>><?php echo esc_attr('(allow all parents)'); ?></option> 
 			<?php 				 
 				foreach (get_pages() as $page) {
-					echo "<option value='{$page->ID}'{$sel}"; selected($page->ID, $settings['parent']); echo ">{$page->post_title} (ID: {$page->ID})</option>\n";							
+					echo "<option value='{$page->ID}' "; selected($page->ID, $settings['parent']); echo ">{$page->post_title} (ID: {$page->ID})</option>\n";							
 				}
 			?>
 			</select>		
@@ -77,7 +77,7 @@ class WPDT_Pages_Widget extends WPDT_Widget{
 				<option value="0" <?php selected(0,$settings['exclude_tree']);?>><?php echo esc_attr('(exclude nothing)'); ?></option> 
 			<?php 				
 				foreach (get_pages() as $page) {
-					echo "<option value='{$page->ID}'{$sel}"; selected($page->ID, $settings['exclude_tree']); echo ">{$page->post_title} (ID: {$page->ID})</option>\n";						
+					echo "<option value='{$page->ID}' "; selected($page->ID, $settings['exclude_tree']); echo ">{$page->post_title} (ID: {$page->ID})</option>\n";						
 				}
 			 ?>
 			</select>		

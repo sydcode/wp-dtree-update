@@ -1,4 +1,8 @@
 <?php
+/**
+ * Modified by sydcode (August 2013)
+ */
+
 function wpdt_get_archive_nodelist($args){ //get archive nodelist	
 	global $month, $wpdb, $wp_locale;	
 	extract( $args, EXTR_SKIP );			
@@ -70,7 +74,8 @@ function wpdt_get_archive_nodelist($args){ //get archive nodelist
 		}
 		$startmonth = $arcresult->year."-".zeroise($arcresult->month, 2)."-01 00:00:00";
 		$endmonth = wpdt_add_month($startmonth, 1);		
-		$query[] = "(SELECT ID AS 'ID', post_date AS 'post_date', post_title AS 'post_title', {$pidcount} AS 'pID'  
+		$query[] = "(SELECT ID AS 'ID', post_date AS 'post_date', post_title AS 'post_title', {$pidcount} AS 'pID', 
+				menu_order AS 'menu_order', post_modified AS 'post_modified', post_author AS 'post_author', post_name AS 'post_name'
 			 {$from}
 			 WHERE post_type = 'post' AND post_status = 'publish' 
 				AND post_date > '{$startmonth}'

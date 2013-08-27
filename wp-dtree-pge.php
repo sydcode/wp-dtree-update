@@ -16,6 +16,7 @@ function wpdt_get_pages_nodelist($args){
 		'authors' => $authors
 	));				
 	$has_root_connection = false;
+	$nodedata = array();
 	if($pageresults){
 		foreach($pageresults as $pageresult){			
 			$nodedata[$idcount] = array( 'id' => $pageresult->ID, 'pid' => $pageresult->post_parent, 'url' => esc_url(get_permalink($pageresult->ID)), 'name' => strip_tags(apply_filters('the_title', $pageresult->post_title)), 'title' => '');

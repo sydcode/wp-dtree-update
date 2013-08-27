@@ -1,4 +1,8 @@
 <?php
+/**
+ * Modified by sydcode (August 2013)
+ */
+ 
 class WPDT_Categories_Widget extends WPDT_Widget{	
 	function __construct() {	
 		$widget_ops = array('classname' => 'wpdt-categories', 'description' => __('Dynamic category list', 'wpdtree') ); //widget settings. 
@@ -17,10 +21,10 @@ class WPDT_Categories_Widget extends WPDT_Widget{
 		$settings['hide_empty'] = isset($new_settings['hide_empty']) ? 1 : 0;
 		$settings['showcount'] 	= isset($new_settings['showcount']) ? 1 : 0;				
 		$settings['allowdupes'] = isset($new_settings['allowdupes']) ? 1 : 0;
-		$setting['exclude_tree']= $new_settings['exclude_tree'];
+		$setting['exclude_tree']= isset($new_settings['exclude_tree']) ? $new_settings['exclude_tree'] : '';
 		$settings['postexclude']= wpdt_clean_exclusion_list($new_settings['postexclude']);		
-		$settings['cpsortby'] 	= $new_settings['cpsortby']; //sort posts
-		$settings['cpsortorder']= $new_settings['cpsortorder']; //order of posts (asc/desc)
+		$settings['cpsortby'] 	= isset($new_settings['cpsortby']) ? $new_settings['cpsortby'] : ''; //sort posts
+		$settings['cpsortorder']= isset($new_settings['cpsortorder']) ? $new_settings['cpsortorder'] : ''; //order of posts (asc/desc)
 		$settings['child_of'] 	= intval($new_settings['child_of']);
 		$settings['parent'] 	= (is_numeric($new_settings['parent']) && intval($new_settings['parent']) >= 0) ? intval($new_settings['parent']) : 'none';
 		$settings['number'] 	= intval($new_settings['number']);
@@ -48,10 +52,14 @@ class WPDT_Categories_Widget extends WPDT_Widget{
 			</select>
 		</p><p>
 			<label for="<?php echo $this->get_field_id('cpsortby'); ?>"><?php _e('Sort posts by:', 'wpdtree'); ?></label> 
-			<select id="<?php echo $this->get_field_id('cpsortby'); ?>" name="<?php echo $this->get_field_name('cpsortby'); ?>" class="widefat" style="width:90px;">
-				<option <?php selected('post_title',$settings['cpsortby']); ?>>post_title</option>
-				<option <?php selected('post_date',$settings['cpsortby']); ?>>post_date</option>
-				<option <?php selected('ID',$settings['cpsortby']); ?>>ID</option>
+			<select id="<?php echo $this->get_field_id('cpsortby'); ?>" name="<?php echo $this->get_field_name('cpsortby'); ?>" class="widefat" style="width:100px;">
+				<option value='post_title' <?php selected('post_title',$settings['cpsortby']); ?>>Title</option>
+				<option value='menu_order' <?php selected('menu_order',$settings['cpsortby']); ?>>Menu Order</option>
+				<option value='post_date' <?php selected('post_date',$settings['cpsortby']); ?>>Date</option>
+				<option value='ID' <?php selected('ID',$settings['cpsortby']); ?>>ID</option>
+				<option value='post_modified' <?php selected('post_modified',$settings['cpsortby']); ?>>Modified</option>
+				<option value='post_author' <?php selected('post_author',$settings['cpsortby']); ?>>Author</option>
+				<option value='post_name' <?php selected('post_name',$settings['cpsortby']); ?>>Slug</option>
 			</select>
 		</p><p>
 			<label for="<?php echo $this->get_field_id('cpsortorder'); ?>"><?php _e('Post order:', 'wpdtree'); ?></label> 

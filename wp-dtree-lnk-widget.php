@@ -13,21 +13,21 @@ class WPDT_Links_Widget extends WPDT_Widget{
 	function update($new_settings, $old_settings){
 		$old_settings = parent::update($new_settings, $old_settings);
 		$settings = $old_settings;		
-		$settings['catsorderby'] 	= $new_settings['catsorderby'];	
-		$settings['catssort_order'] = $new_settings['catssort_order'];		
+		$settings['catsorderby'] 		= isset($new_settings['catsorderby']) ? $new_settings['catsorderby'] : '';	
+		$settings['catssort_order'] = isset($new_settings['catssort_order']) ? $new_settings['catssort_order'] : '';		
 		$settings['category']      	= wpdt_clean_exclusion_list($settings['include'].','.$new_settings['category']); //Comma separated list of bookmark category ID's.
-		$settings['category_name'] 	= $new_settings['category_name']; //name of a category of bookmarks to retrieve. Overrides category parameter.
+		$settings['category_name'] 	= isset($new_settings['category_name']) ? $new_settings['category_name'] : ''; //name of a category of bookmarks to retrieve. Overrides category parameter.
 		$settings['hide_invisible']	= isset($new_settings['hide_invisible']) ? 1 : 0;
 		$settings['show_updated']  	= isset($new_settings['show_updated']) ? 1 : 0;
-		$settings['showcount']		= isset($new_settings['showcount']) ? 1 : 0;
-		$settings['search']        	= $new_settings['search']; //Searches link_url, link_name or link_description like the search string.
-		$settings['orderby']		= $new_settings['sortby']; //work around inconsistent API
-		$settings['order']			= $new_settings['sort_order'];
+		$settings['showcount']			= isset($new_settings['showcount']) ? 1 : 0;
+		$settings['search']        	= isset($new_settings['search']) ? $new_settings['search'] : ''; //Searches link_url, link_name or link_description like the search string.
+		$settings['orderby']				= isset($new_settings['sortby']) ? $new_settings['sortby'] : ''; //work around inconsistent API
+		$settings['order']					= isset($new_settings['sort_order']) ? $new_settings['sort_order'] : '';
 		$settings['opentoselection']= 0;
 		$settings['useselection'] 	= 0;
-		$settings['folderlinks']	= 0;
-		$settings['include']		= '';
-		$settings['treetype'] 		= 'lnk';
+		$settings['folderlinks']		= 0;
+		$settings['include']				= '';
+		$settings['treetype'] 			= 'lnk';
 		return $settings;
 	}
 

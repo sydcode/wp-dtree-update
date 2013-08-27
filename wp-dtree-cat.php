@@ -1,4 +1,8 @@
 <?php
+/**
+ * Modified by sydcode (August 2013)
+ */
+
 function wpdt_get_category_nodelist($args){	
 	global $wpdb;	
 	extract($args, EXTR_SKIP);			
@@ -93,6 +97,48 @@ function wpdt_get_category_nodelist($args){
 	}	
 	unset($catids);
 	unset($postresults);
+	
+	// Support for "Advanced Post Types Order" plugin
+	// Only when sorting posts by menu order, like in free plugin
+	// Added by sydcode (August 2013)
+	if ($cpsortby == 'menu_order' && defined('APTO_SLUG') && APTO_SLUG == 'advanced-post-types-order') {
+		// Check table exists
+		$apto_table = $wpdb->prefix . 'apto';
+		$table_exists = $wpdb->get_var("SHOW TABLES LIKE '{$apto_table}'");
+		if ($table_exists) {
+			// Find category nodes
+			foreach ($nodelist as $node) {
+				if ($node['pid'] <= 0) {
+					// Get ordered posts for each category node
+					$term_id = abs($node['id']);
+					$sql = "
+						SELECT post_id FROM {$apto_table} 
+						WHERE taxonomy = 'category' 
+						AND post_type = 'post' 
+						AND term_id = %d
+						ORDER BY id {$cpsortorder}
+					";
+					$apto_posts = $wpdb->get_results($wpdb->prepare($sql, $term_id), ARRAY_A);
+					if (!empty($apto_posts)) {
+						// Search for matching posts in nodelist
+						foreach ($apto_posts as $post1) {
+							foreach ($nodelist as $key1 => $node1) {
+								if ($node['id'] == $node1['pid'] && $post1['post_id'] == $node1['id']) {
+									// Move post to end of nodelist
+									$item = $nodelist[$key1];
+									unset($nodelist[$key1]);
+									array_push($nodelist, $item); 
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}	
+	
 	return $nodelist;
 }
+
 ?>
